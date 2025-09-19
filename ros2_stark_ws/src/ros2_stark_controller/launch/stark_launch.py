@@ -3,19 +3,35 @@ from launch_ros.actions import Node
 
 def generate_launch_description():
     return LaunchDescription([
-        # TODO: 更新以下为实际配置
-        # 一代灵巧手触觉版
+        # 右手控制器节点
         Node(
             package='ros2_stark_controller',
             executable='stark_node',
+            name='right_hand_controller',
+            namespace='right_hand',
             output='screen',
-            parameters=['/home/yongle/projects/stark-serialport-example/ros2_stark_ws/src/ros2_stark_controller/config/params_revo1_touch.yaml'],  # 直接传递路径
+            parameters=[
+                {'port': "/dev/ttyUSB0"},
+                {'baudrate': 460800},
+                {'slave_id': 2},
+                {'protocol_type': 1},  # Modbus RTU
+                {'log_level': 2}       # Info
+            ]
         ),
-        # 二代灵巧手
-        # Node(
-        #     package='ros2_stark_controller',
-        #     executable='stark_node',
-        #     output='screen',
-        #     parameters=['/home/yongle/projects/stark-serialport-example/ros2_stark_ws/src/ros2_stark_controller/config/params_revo2.yaml'],  # 直接传递路径
-        # ),
+        
+        # 左手控制器节点
+        Node(
+            package='ros2_stark_controller',
+            executable='stark_node',
+            name='left_hand_controller',
+            namespace='left_hand',
+            output='screen',
+            parameters=[
+                {'port': "/dev/ttyUSB1"},
+                {'baudrate': 460800},
+                {'slave_id': 1},
+                {'protocol_type': 1},  # Modbus RTU
+                {'log_level': 2}       # Info
+            ]
+        ),
     ])
